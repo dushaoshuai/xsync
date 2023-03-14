@@ -12,7 +12,7 @@ func ExampleOnces() {
 	onces := xsync.OnceEvery(time.Second)
 
 	var wg sync.WaitGroup
-	for i := 0; i < 20; i++ {
+	for i := 0; i < 10_000_000; i++ {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
@@ -21,7 +21,6 @@ func ExampleOnces() {
 				return nil
 			})
 		}()
-		time.Sleep(300 * time.Millisecond)
 	}
 	wg.Wait()
 
@@ -31,4 +30,6 @@ func ExampleOnces() {
 	// Only once this second: 41
 	// Only once this second: 42
 	// Only once this second: 43
+	// Only once this second: 44
+	// Only once this second: 45
 }
