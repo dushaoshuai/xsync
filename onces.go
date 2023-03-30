@@ -11,7 +11,7 @@ import (
 type Onces struct {
 	// last is the last time one successful action was performed,
 	// represented in Unix nanoseconds.
-	last     int64
+	last     int64 // todo use atomic.Value
 	interval time.Duration
 	m        sync.Mutex
 }
@@ -19,9 +19,7 @@ type Onces struct {
 // OnceEvery returns a Onces that will perform exactly one successful action within each interval.
 func OnceEvery(interval time.Duration) *Onces {
 	return &Onces{
-		last:     0,
 		interval: interval,
-		m:        sync.Mutex{},
 	}
 }
 
