@@ -30,6 +30,4 @@ func ExampleOnces() {
 	// Only once this second: 41
 	// Only once this second: 42
 	// Only once this second: 43
-	// Only once this second: 44
-	// Only once this second: 45
 }
