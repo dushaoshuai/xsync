@@ -29,13 +29,13 @@ func OnceEvery(interval time.Duration) *Onces {
 // f will be invoked each time Do is called unless the previous call to f returns
 // without error. After a successful call to f returns, next interval starts.
 func (o *Onces) Do(f func() error) error {
-	if !(atomic.LoadInt64(&o.next) <= time.Now().UnixNano()) {
+	if atomic.LoadInt64(&o.next) > time.Now().UnixNano() {
 		return nil
 	}
 
 	o.m.Lock()
 	defer o.m.Unlock()
-	if !(o.next <= time.Now().UnixNano()) {
+	if o.next > time.Now().UnixNano() {
 		return nil
 	}
 	err := f()
