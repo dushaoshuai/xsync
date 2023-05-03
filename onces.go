@@ -11,7 +11,8 @@ import (
 type Onces struct {
 	// next is the next time one successful action may be performed,
 	// represented in Unix nanoseconds.
-	next     int64
+	next int64
+
 	interval time.Duration
 	m        sync.Mutex
 }
