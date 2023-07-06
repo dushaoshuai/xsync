@@ -6,8 +6,8 @@ import (
 	"time"
 )
 
-// A Onces will perform exactly one successful action at intervals.
-// A Onces may be used by multiple goroutines simultaneously.
+// An Onces will perform exactly one successful action at intervals.
+// An Onces may be used by multiple goroutines simultaneously.
 type Onces struct {
 	// next is the next time one successful action may be performed,
 	// represented in Unix nanoseconds.
@@ -17,7 +17,7 @@ type Onces struct {
 	m        sync.Mutex
 }
 
-// OnceEvery returns a Onces that will perform exactly one successful action within each interval.
+// OnceEvery returns an Onces that will perform exactly one successful action within each interval.
 func OnceEvery(interval time.Duration) *Onces {
 	return &Onces{
 		next:     time.Now().UnixNano(),
