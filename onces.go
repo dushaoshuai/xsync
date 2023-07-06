@@ -6,30 +6,36 @@ import (
 	"time"
 )
 
-// An Onces will perform exactly one successful action at intervals.
+// Onces is an object that will try to perform a successful action
+// only after a specified interval has elapsed since the last successful action.
+// An Onces must not be copied after first use.
 // An Onces may be used by multiple goroutines simultaneously.
 type Onces struct {
 	// next is the next time one successful action may be performed,
 	// represented in Unix nanoseconds.
 	next int64
-
+	// at least this interval between two successful actions
 	interval time.Duration
-	m        sync.Mutex
+
+	m sync.Mutex
 }
 
-// OnceEvery returns an Onces that will perform exactly one successful action within each interval.
-// panic if interval <= 0
-func OnceEvery(interval time.Duration) *Onces {
+// OnceInterval returns a new Onces.
+// It will panic if interval is less than or equal to 0.
+func OnceInterval(interval time.Duration) *Onces {
+	if interval <= 0 {
+		panic("xsync: OnceInterval: interval must be greater than 0")
+	}
 	return &Onces{
-		next:     time.Now().UnixNano(),
+		next:     time.Now().UnixNano(), // the first actions may be performed immediately without having to wait
 		interval: interval,
 	}
 }
 
-// Do calls the function f if and only if f has never been called successfully
-// within this interval. In other words, within current interval,
-// f will be invoked each time Do is called unless the previous call to f returns
-// without error. After a successful call to f returns, next interval starts.
+// Do calls the function f if and only if the specified
+// interval has elapsed since the last successful call to f.
+// Do considers a call to f succeed if f returns nil.
+// It's ok if f has different values in each invocation.
 func (o *Onces) Do(f func() error) error {
 	if atomic.LoadInt64(&o.next) > time.Now().UnixNano() {
 		return nil

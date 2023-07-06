@@ -9,7 +9,7 @@ import (
 )
 
 func ExampleOnces() {
-	onces := xsync.OnceEvery(time.Second)
+	onces := xsync.OnceInterval(time.Second)
 
 	var wg sync.WaitGroup
 	for i := 0; i < 10_000_000; i++ {

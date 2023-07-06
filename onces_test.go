@@ -33,7 +33,7 @@ func FuzzDo(f *testing.F) {
 
 		var (
 			interval = time.Duration(dNano)
-			onces    = xsync.OnceEvery(interval)
+			onces    = xsync.OnceInterval(interval)
 
 			c    = make(chan time.Time)
 			prev time.Time
