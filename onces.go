@@ -6,8 +6,8 @@ import (
 	"time"
 )
 
-// Onces is an object that will try to perform a successful action
-// only after a specified interval has elapsed since the last successful action.
+// Onces is an object that will try to (if asked) perform a successful action
+// only if a specified interval has elapsed since the last successful action.
 // An Onces must not be copied after first use.
 // An Onces may be used by multiple goroutines simultaneously.
 type Onces struct {
