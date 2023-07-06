@@ -18,6 +18,7 @@ type Onces struct {
 }
 
 // OnceEvery returns an Onces that will perform exactly one successful action within each interval.
+// panic if interval <= 0
 func OnceEvery(interval time.Duration) *Onces {
 	return &Onces{
 		next:     time.Now().UnixNano(),

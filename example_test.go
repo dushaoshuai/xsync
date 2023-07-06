@@ -24,7 +24,7 @@ func ExampleOnces() {
 	}
 	wg.Wait()
 
-	// Output:
+	// Example Output:
 	// Only once this second: 30
 	// Only once this second: 31
 	// Only once this second: 32

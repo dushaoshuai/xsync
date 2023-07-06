@@ -21,7 +21,13 @@ func FuzzDo(f *testing.F) {
 		if dNano > 5*time.Second.Nanoseconds() {
 			t.SkipNow()
 		}
+		if dNano <= 0 {
+			t.SkipNow()
+		}
 		if i > 1_00_000 {
+			t.SkipNow()
+		}
+		if i <= 0 {
 			t.SkipNow()
 		}
 
@@ -60,10 +66,8 @@ func FuzzDo(f *testing.F) {
 		go func() {
 			select {
 			case <-fail:
-				go func() {
-					for range c {
-					}
-				}()
+				for range c {
+				}
 			case <-succ:
 			}
 		}()
@@ -71,6 +75,7 @@ func FuzzDo(f *testing.F) {
 		for curr := range c {
 			if !prev.IsZero() && prev.Add(interval).After(curr) {
 				close(fail)
+				eg.Wait()
 				t.Fatalf("(%v).Add(%v).After(%v) = %v, want %v", prev, interval, curr, true, false)
 			}
 			prev = curr
